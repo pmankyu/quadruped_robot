@@ -5,7 +5,7 @@ BIN = arm-none-eabi-objcopy
 STL = st-flash
 CFLAGS = -mthumb -mcpu=cortex-m3
 
-all: app.bin
+all: main.bin
 
 crt.o: crt.s
 	$(AS) -o crt.o crt.s
@@ -13,17 +13,17 @@ crt.o: crt.s
 main.o: main.c
 	$(CC) $(CFLAGS) -c -o main.o main.c
 
-app.elf: linker.ld crt.o main.o
-	$(LD) -T linker.ld -o app.elf crt.o main.o
+main.elf: linker.ld crt.o main.o
+	$(LD) -T linker.ld -o main.elf crt.o main.o
 
-app.bin: app.elf
-	$(BIN) -O binary app.elf app.bin
+main.bin: main.elf
+	$(BIN) -O binary main.elf main.bin
 
 clean:
 	rm -f *.o *.elf *.bin
 
-flash: app.bin
-	$(STL) --connect-under-reset write app.bin 0x8000000
+flash: main.bin
+	$(STL) --connect-under-reset write main.bin 0x8000000
 
 erase:
 	$(STL) erase
