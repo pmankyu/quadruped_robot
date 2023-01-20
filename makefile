@@ -23,7 +23,7 @@ clean:
 	rm -f *.o *.elf *.bin
 
 flash: app.bin
-	$(STL) write app.bin 0x8000000
+	$(STL) --connect-under-reset write app.bin 0x8000000
 
 erase:
 	$(STL) erase
