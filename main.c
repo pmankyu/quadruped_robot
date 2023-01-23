@@ -1,8 +1,13 @@
 #include <stdint.h>
 
+#define STM32F10X_MD
+
+#include "stm32f10x.h"
+
+
 // register address
-#define RCC_BASE      0x40021000
-#define GPIOA_BASE    0x40010800
+// #define RCC_BASE      0x40021000
+// #define GPIOA_BASE    0x40010800
 
 #define RCC_APB2ENR   *(volatile uint32_t *)(RCC_BASE   + 0x18)
 
