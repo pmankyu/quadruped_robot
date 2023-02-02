@@ -4,10 +4,11 @@ LD = arm-none-eabi-gcc
 BIN = arm-none-eabi-objcopy
 STL = st-flash
 
-TARGET = main.bin
+TARGET = main
 LIB_SRC_DIR =./drivers/stm_lib/src
 SRC_DIR =./src
 ASM_DIR = ./drivers/cmsis_boot/startup
+BIN_DIR = ./bin
 
 INCLUDE = -Idrivers/cmsis/
 INCLUDE += -Idrivers/cmsis_boot/
@@ -30,7 +31,7 @@ ASM_FILES = $(wildcard $(ASM_DIR)/*.s)
 C_OBJ = $(SRC_FILES:.c=.o)
 ASM_OBJ = $(ASM_FILES:.s=.o)
 
-all: $(TARGET)
+all: $(BIN_DIR)/$(TARGET).bin
 
 $(C_OBJ): %.o:%.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -38,20 +39,21 @@ $(C_OBJ): %.o:%.c
 $(ASM_OBJ): $(ASM_FILES)
 	$(AS) -o $(ASM_OBJ) $(ASM_FILES)
 
-main.elf: $(ASM_OBJ) $(C_OBJ) 
-	$(LD) $(CFLAGS) -o main.elf $(ASM_OBJ) $(C_OBJ) 
+$(BIN_DIR)/$(TARGET).elf: $(ASM_OBJ) $(C_OBJ) 
+	$(LD) $(CFLAGS) -o $(BIN_DIR)/$(TARGET).elf $(ASM_OBJ) $(C_OBJ) 
 
-main.bin: main.elf
-	$(BIN) -O binary main.elf main.bin
+$(BIN_DIR)/$(TARGET).bin: $(BIN_DIR)/$(TARGET).elf
+	$(BIN) -O binary $(BIN_DIR)/$(TARGET).elf $(BIN_DIR)/$(TARGET).bin
 
-flash: main.bin
-	$(STL) --connect-under-reset write main.bin 0x8000000
+flash: $(BIN_DIR)/$(TARGET).bin
+	$(STL) --connect-under-reset write $(BIN_DIR)/$(TARGET).bin 0x8000000
 
 erase:
 	$(STL) erase
 
 .PHONY: clean all
 clean:
-	rm -f $(C_OBJ) $(ASM_OBJ) $(TARGET)
+	rm -f $(C_OBJ) $(ASM_OBJ)
+	rm -f $(BIN_DIR)/*
  
 -include $(DEPS)
