@@ -22,9 +22,15 @@ CFLAGS += -mlittle-endian -mthumb -mcpu=cortex-m3 -mthumb-interwork
 CFLAGS += -DSTM32F10X_MD
 CFLAGS += -DUSE_STDPERIPH_DRIVER
 CFLAGS += -DUSE_FULL_ASSERT
-CFLAGS += -T$(LDSCRIPT)
-CFLAGS += -Wl,--gc-sections 
 CFLAGS += $(INCLUDE)
+
+LDFLAGS = -T$(LDSCRIPT)
+LDFLAGS += -mthumb
+LDFLAGS += -mcpu=cortex-m3
+LDFLAGS += --specs=nosys.specs
+LDFLAGS += --specs=nano.specs
+LDFLAGS += -lc
+LDFLAGS += -Wl,--gc-sections 
 
 SRC_FILES = $(wildcard $(LIB_SRC_DIR)/*.c)
 SRC_FILES += $(wildcard $(SRC_DIR)/*.c)
@@ -42,7 +48,7 @@ $(ASM_OBJ): $(ASM_FILES)
 	$(AS) -o $(ASM_OBJ) $(ASM_FILES)
 
 $(BIN_DIR)/$(TARGET).elf: $(ASM_OBJ) $(C_OBJ) 
-	$(LD) $(CFLAGS) -o $(BIN_DIR)/$(TARGET).elf $(ASM_OBJ) $(C_OBJ) 
+	$(LD) $(LDFLAGS) -o $(BIN_DIR)/$(TARGET).elf $(ASM_OBJ) $(C_OBJ) 
 
 $(BIN_DIR)/$(TARGET).bin: $(BIN_DIR)/$(TARGET).elf
 	$(BIN) -O binary $(BIN_DIR)/$(TARGET).elf $(BIN_DIR)/$(TARGET).bin
