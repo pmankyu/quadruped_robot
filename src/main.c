@@ -16,6 +16,8 @@ USART_InitTypeDef USART_InitStructure;
 int main(void)
 {
   volatile int i;
+	uint8_t ch_data = 'D';
+
   /* Initialize Leds mounted on STM32 board */
   GPIO_InitTypeDef  GPIO_InitStructure;
   /* Initialize LED which connected to PC13, Enable the Clock*/
@@ -35,6 +37,7 @@ int main(void)
 
   STM_EVAL_COMInit(COM1, &USART_InitStructure);
 
+  USART_SendData(EVAL_COM1, (uint8_t) ch_data);
   /* Output a message on Hyperterminal using printf function */
   printf("\n\rUSART Printf Example: retarget the C library printf function to the USART\n\r");
 
