@@ -1,33 +1,61 @@
 CC = arm-none-eabi-gcc
 AS = arm-none-eabi-as
-LD = arm-none-eabi-ld
+LD = arm-none-eabi-gcc
 BIN = arm-none-eabi-objcopy
 STL = st-flash
-CMSIS_DEV_PATH = ../files/STM32F10x_StdPeriph_Lib_V3.6.0/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x
-CMSIS_CORE_PATH = ../files/STM32F10x_StdPeriph_Lib_V3.6.0/Libraries/CMSIS/CM3/CoreSupport
-INC_PATH =../files/STM32F10x_StdPeriph_Lib_V3.6.0/Libraries/STM32F10x_StdPeriph_Driver/inc
-SRC_PATH =../files/STM32F10x_StdPeriph_Lib_V3.6.0/Libraries/STM32F10x_StdPeriph_Driver/src
-CFLAGS = -mthumb -mcpu=cortex-m3 -I$(CMSIS_DEV_PATH) -I$(CMSIS_CORE_PATH) -I$(INC_PATH) -I$(SRC_PATH)
 
-all: main.bin
+TARGET = main
+LIB_SRC_DIR =./drivers/stm_lib/src
+SRC_DIR =./src
+ASM_DIR = ./drivers/cmsis_boot/startup
+BIN_DIR = ./bin
 
-crt.o: crt.s
-	$(AS) -o crt.o crt.s
+INCLUDE = -Idrivers/cmsis/
+INCLUDE += -Idrivers/cmsis_boot/
+INCLUDE += -Idrivers/stm_lib/inc
+INCLUDE += -Iinc/
 
-main.o: main.c
-	$(CC) $(CFLAGS) -c -o main.o main.c
+LDSCRIPT = STM32F103RBTX_FLASH.ld
 
-main.elf: linker.ld crt.o main.o
-	$(LD) -T linker.ld -o main.elf crt.o main.o
+CFLAGS = -g -O2 -Wall
+CFLAGS += -mlittle-endian -mthumb -mcpu=cortex-m3 -mthumb-interwork
+CFLAGS += -DSTM32F10X_MD
+CFLAGS += -DUSE_STDPERIPH_DRIVER
+CFLAGS += -DUSE_FULL_ASSERT
+CFLAGS += -T$(LDSCRIPT)
+CFLAGS += -Wl,--gc-sections 
+CFLAGS += $(INCLUDE)
 
-main.bin: main.elf
-	$(BIN) -O binary main.elf main.bin
+SRC_FILES = $(wildcard $(LIB_SRC_DIR)/*.c)
+SRC_FILES += $(wildcard $(SRC_DIR)/*.c)
+ASM_FILES = $(wildcard $(ASM_DIR)/*.s)
 
-clean:
-	rm -f *.o *.elf *.bin
+C_OBJ = $(SRC_FILES:.c=.o)
+ASM_OBJ = $(ASM_FILES:.s=.o)
 
-flash: main.bin
-	$(STL) --connect-under-reset write main.bin 0x8000000
+all: $(BIN_DIR)/$(TARGET).bin
+
+$(C_OBJ): %.o:%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(ASM_OBJ): $(ASM_FILES)
+	$(AS) -o $(ASM_OBJ) $(ASM_FILES)
+
+$(BIN_DIR)/$(TARGET).elf: $(ASM_OBJ) $(C_OBJ) 
+	$(LD) $(CFLAGS) -o $(BIN_DIR)/$(TARGET).elf $(ASM_OBJ) $(C_OBJ) 
+
+$(BIN_DIR)/$(TARGET).bin: $(BIN_DIR)/$(TARGET).elf
+	$(BIN) -O binary $(BIN_DIR)/$(TARGET).elf $(BIN_DIR)/$(TARGET).bin
+
+flash: $(BIN_DIR)/$(TARGET).bin
+	$(STL) --connect-under-reset write $(BIN_DIR)/$(TARGET).bin 0x8000000
 
 erase:
 	$(STL) erase
+
+.PHONY: clean all
+clean:
+	rm -f $(C_OBJ) $(ASM_OBJ)
+	rm -f $(BIN_DIR)/*
+ 
+-include $(DEPS)
