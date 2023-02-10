@@ -27,7 +27,7 @@ CFLAGS += $(INCLUDE)
 LDFLAGS = -T$(LDSCRIPT)
 LDFLAGS += -mthumb
 LDFLAGS += -mcpu=cortex-m3
-LDFLAGS += --specs=nosys.specs
+#LDFLAGS += --specs=nosys.specs
 LDFLAGS += --specs=nano.specs
 LDFLAGS += -lc
 LDFLAGS += -Wl,--gc-sections 
