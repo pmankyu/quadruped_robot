@@ -3,6 +3,7 @@
 
 #include "stm32f10x.h"
 #include "stm32_eval.h"
+
 USART_InitTypeDef USART_InitStructure;
 
 #ifdef __GNUC__
@@ -16,7 +17,7 @@ USART_InitTypeDef USART_InitStructure;
 int main(void)
 {
   volatile int i;
-	uint8_t ch_data = 'D';
+	//uint8_t ch_data = 'D';
 
   /* Initialize Leds mounted on STM32 board */
   GPIO_InitTypeDef  GPIO_InitStructure;
@@ -37,10 +38,8 @@ int main(void)
 
   STM_EVAL_COMInit(COM1, &USART_InitStructure);
 
-  USART_SendData(EVAL_COM1, (uint8_t) ch_data);
-  /* Output a message on Hyperterminal using printf function */
-  printf("\n\rUSART Printf Example: retarget the C library printf function to the USART\n\r");
-
+  printf("Hello printf!\n\r");
+	
 	while(1)
   {
     /* Toggle LED which connected to PC13*/
@@ -58,7 +57,7 @@ int main(void)
   * @param  None
   * @retval None
   */
-PUTCHAR_PROTOTYPE
+int __io_putchar(int ch)
 {
   /* Place your implementation of fputc here */
   /* e.g. write a character to the USART */
