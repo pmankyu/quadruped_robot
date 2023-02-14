@@ -39,16 +39,7 @@ int main(void)
   STM_EVAL_COMInit(COM1, &USART_InitStructure);
 	setvbuf(stdout, NULL, _IONBF, 0);
 
-  printf("Hello printf!\r\n");
-	printf("Characters: %c %c \r\n", 'a', 65);
-  printf("Decimals: %d %ld\r\n", 1977, 650000L);
-  printf("Preceding with blanks: %10d \r\n", 1977);
-  printf("Preceding with zeros: %010d \r\n", 1977);
-  printf("Some different radices: %d %x %o %#x %#o \r\n"
-																				, 100, 100, 100, 100, 100);
-  printf("floats: %4.2f %+.0e %E \r\n", 3.1416, 3.1416, 3.1416);
-  printf("Width trick: %*d \r\n", 5, 10);
-  printf("%s \r\n", "A string");
+  printf("pmk's spotmicror\n");
 	
 	while(1)
   {
