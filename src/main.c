@@ -37,8 +37,9 @@ int main(void)
   USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
 
   STM_EVAL_COMInit(COM1, &USART_InitStructure);
+	setvbuf(stdout, NULL, _IONBF, 0);
 
-  printf("Hello printf!\n\r");
+  printf("Hello printf!\r\n");
 	
 	while(1)
   {
