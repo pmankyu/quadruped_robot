@@ -31,6 +31,7 @@ LDFLAGS += -mcpu=cortex-m3
 LDFLAGS += --specs=nano.specs
 LDFLAGS += -lc
 LDFLAGS += -Wl,--gc-sections 
+LDFLAGS += -u _printf_float
 
 SRC_FILES = $(wildcard $(LIB_SRC_DIR)/*.c)
 SRC_FILES += $(wildcard $(SRC_DIR)/*.c)
