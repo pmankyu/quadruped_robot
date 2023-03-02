@@ -17,8 +17,7 @@ USART_InitTypeDef USART_InitStructure;
 int main(void)
 {
   volatile int i;
-	//uint8_t ch_data = 'D';
-
+  
   /* Initialize Leds mounted on STM32 board */
   GPIO_InitTypeDef  GPIO_InitStructure;
   /* Initialize LED which connected to PC13, Enable the Clock*/
@@ -39,7 +38,7 @@ int main(void)
   STM_EVAL_COMInit(COM1, &USART_InitStructure);
 	setvbuf(stdout, NULL, _IONBF, 0);
 
-  printf("pmk's spotmicror\n");
+  printf("pmk's spotmicro\r\n");
 	
 	while(1)
   {

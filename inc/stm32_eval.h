@@ -45,6 +45,27 @@ typedef enum
 #define EVAL_COM2_RX_GPIO_CLK            RCC_APB2Periph_GPIOA
 #define EVAL_COM2_IRQn                   USART2_IRQn
 
+/**
+  * @brief  MPU6050 Temperature Sensor I2C Interface pins
+  */  
+#define MPU6050_I2C                         I2C1
+#define MPU6050_I2C_CLK                     RCC_APB1Periph_I2C1
+#define MPU6050_I2C_SCL_PIN                 GPIO_Pin_6                  /* PB.06 */
+#define MPU6050_I2C_SCL_GPIO_PORT           GPIOB                       /* GPIOB */
+#define MPU6050_I2C_SCL_GPIO_CLK            RCC_APB2Periph_GPIOB
+#define MPU6050_I2C_SDA_PIN                 GPIO_Pin_7                  /* PB.07 */
+#define MPU6050_I2C_SDA_GPIO_PORT           GPIOB                       /* GPIOB */
+#define MPU6050_I2C_SDA_GPIO_CLK            RCC_APB2Periph_GPIOB
+#define MPU6050_I2C_SMBUSALERT_PIN          GPIO_Pin_5                  /* PB.05 */
+#define MPU6050_I2C_SMBUSALERT_GPIO_PORT    GPIOB                       /* GPIOB */
+#define MPU6050_I2C_SMBUSALERT_GPIO_CLK     RCC_APB2Periph_GPIOB
+#define MPU6050_I2C_DR                      ((uint32_t)0x40005410)
+
+#define MPU6050_DMA_CLK                     RCC_AHBPeriph_DMA1
+#define MPU6050_DMA_TX_CHANNEL              DMA1_Channel6
+#define MPU6050_DMA_RX_CHANNEL              DMA1_Channel7
+#define MPU6050_DMA_TX_TCFLAG               DMA1_FLAG_TC6
+#define MPU6050_DMA_RX_TCFLAG               DMA1_FLAG_TC7
 
 void STM_EVAL_COMInit(COM_TypeDef COM, USART_InitTypeDef* USART_InitStruct);
 #ifdef __cplusplus
