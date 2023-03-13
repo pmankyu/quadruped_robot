@@ -7,6 +7,8 @@
   
 __IO uint32_t  MPU6050_Timeout = MPU6050_LONG_TIMEOUT; 
 
+static void MPU6050_DMA_Config(MPU6050_DMADirection_TypeDef Direction, uint8_t* buffer, uint8_t NumData);
+
 /**
  * @brief  Initializes the MPU6050_I2C.
  * @param  None
@@ -21,16 +23,16 @@ void MPU6050_Init(void)
 	I2C_DeInit(MPU6050_I2C);
 
 	/*!< MPU6050_I2C Init */
-	I2C_InitStructure.I2C_Mode = I2C_Mode_SMBusHost;
+	I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;
 	I2C_InitStructure.I2C_DutyCycle = I2C_DutyCycle_2;
 	I2C_InitStructure.I2C_OwnAddress1 = 0x00;
-	I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
+	I2C_InitStructure.I2C_Ack = I2C_Ack_Disable;
 	I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
 	I2C_InitStructure.I2C_ClockSpeed = MPU6050_I2C_SPEED;
 	I2C_Init(MPU6050_I2C, &I2C_InitStructure);
 
 	/*!< Enable SMBus Alert interrupt */
-	I2C_ITConfig(MPU6050_I2C, I2C_IT_ERR, ENABLE);
+	//I2C_ITConfig(MPU6050_I2C, I2C_IT_ERR, ENABLE);
 
 	/*!< MPU6050_I2C Init */
 
@@ -51,8 +53,7 @@ void MPU6050_LowLevel_Init(void)
     
   /*!< MPU6050_I2C_SCL_GPIO_CLK, MPU6050_I2C_SDA_GPIO_CLK 
        and MPU6050_I2C_SMBUSALERT_GPIO_CLK Periph clock enable */
-  RCC_APB2PeriphClockCmd(MPU6050_I2C_SCL_GPIO_CLK | MPU6050_I2C_SDA_GPIO_CLK |
-                         MPU6050_I2C_SMBUSALERT_GPIO_CLK, ENABLE);
+  RCC_APB2PeriphClockCmd(MPU6050_I2C_SCL_GPIO_CLK | MPU6050_I2C_SDA_GPIO_CLK, ENABLE);
   
   /*!< Configure MPU6050_I2C pins: SCL */
   GPIO_InitStructure.GPIO_Pin = MPU6050_I2C_SCL_PIN;
@@ -65,9 +66,9 @@ void MPU6050_LowLevel_Init(void)
   GPIO_Init(MPU6050_I2C_SDA_GPIO_PORT, &GPIO_InitStructure);
 
   /*!< Configure MPU6050_I2C pin: SMBUS ALERT */
-  GPIO_InitStructure.GPIO_Pin = MPU6050_I2C_SMBUSALERT_PIN;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
-  GPIO_Init(MPU6050_I2C_SMBUSALERT_GPIO_PORT, &GPIO_InitStructure); 
+  //GPIO_InitStructure.GPIO_Pin = MPU6050_I2C_SMBUSALERT_PIN;
+  //GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+  //GPIO_Init(MPU6050_I2C_SMBUSALERT_GPIO_PORT, &GPIO_InitStructure); 
 }
 
 /**

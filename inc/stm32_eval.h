@@ -68,6 +68,7 @@ typedef enum
 #define MPU6050_DMA_RX_TCFLAG               DMA1_FLAG_TC7
 
 void STM_EVAL_COMInit(COM_TypeDef COM, USART_InitTypeDef* USART_InitStruct);
+int32_t i2c_scanner();
 #ifdef __cplusplus
 }
 #endif

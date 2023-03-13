@@ -3,6 +3,7 @@
 
 #include "stm32f10x.h"
 #include "stm32_eval.h"
+#include "mpu6050.h"
 
 USART_InitTypeDef USART_InitStructure;
 
@@ -17,6 +18,7 @@ USART_InitTypeDef USART_InitStructure;
 int main(void)
 {
   volatile int i;
+	int temp_addr = -3;
   
   /* Initialize Leds mounted on STM32 board */
   GPIO_InitTypeDef  GPIO_InitStructure;
@@ -39,6 +41,11 @@ int main(void)
 	setvbuf(stdout, NULL, _IONBF, 0);
 
   printf("pmk's spotmicro\r\n");
+
+	MPU6050_Init();
+  printf("i2c scan start!\r\n");
+	temp_addr = i2c_scanner();
+  printf("address : 0x%X(%d)!\r\n",temp_addr,temp_addr);
 	
 	while(1)
   {

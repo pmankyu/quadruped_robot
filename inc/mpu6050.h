@@ -8,12 +8,6 @@ extern "C" {
 
 #include "stm32f10x.h"
 
-/* Default I2C used */
-#ifndef MPU6050_I2C
-#define MPU6050_I2C                 I2C3
-#define MPU6050_I2C_PINSPACK        TM_I2C_PinsPack_1
-#endif
-
 /* Default I2C clock */
 #ifndef MPU6050_I2C_CLOCK
 #define MPU6050_I2C_CLOCK           400000
@@ -132,8 +126,8 @@ typedef struct {
 #define MPU6050_REG_THYS       0x02  /*!< Temperature Register of MPU6050 */
 #define MPU6050_REG_TOS        0x03  /*!< Over-temp Shutdown threshold Register of MPU6050 */
 #define I2C_TIMEOUT         ((uint32_t)0x3FFFF) /*!< I2C Time out */
-#define MPU6050_ADDR           0x90   /*!< MPU6050 address */
-#define MPU6050_I2C_SPEED      100000 /*!< I2C Speed */
+#define MPU6050_ADDR           0x68   /*!< MPU6050 address */
+#define MPU6050_I2C_SPEED      400000 /*!< I2C Speed */
   
  
 void MPU6050_Init(void);
@@ -143,7 +137,6 @@ uint8_t MPU6050_WriteConfReg(uint8_t RegValue);
 uint8_t MPU6050_WriteReg(uint8_t RegName, uint16_t RegValue);
 uint16_t MPU6050_ReadTemp(void);
 uint8_t MPU6050_ReadConfReg(void);
-static void MPU6050_DMA_Config(MPU6050_DMADirection_TypeDef Direction, uint8_t* buffer, uint8_t NumData);
 
 /** 
   * @brief  Timeout user callback function. This function is called when a timeout
